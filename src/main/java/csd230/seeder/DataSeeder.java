@@ -7,6 +7,7 @@ import net.datafaker.Faker;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.concurrent.TimeUnit;
@@ -50,8 +51,8 @@ public class DataSeeder implements CommandLineRunner {
         System.out.println("Seeding Magazines...");
         for (int i = 0; i < 5; i++) {
             // Convert Faker Date to LocalDateTime
-            LocalDateTime issueDate = faker.date().past(365, TimeUnit.DAYS)
-                    .toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+            LocalDate issueDate = faker.date().past(365, TimeUnit.DAYS)
+                    .toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 
             MagazineEntity mag = new MagazineEntity(
                     faker.book().publisher() + " Weekly", // Using publisher as magazine title

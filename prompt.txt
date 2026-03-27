@@ -1,0 +1,7 @@
+"I have attached my Bookstore project context. I currently have a working CRUD for Books. I need to implement a similar CRUD for ElectricGuitars and AcousticGuitars.
+
+Create a Magazine.jsx component that displays title, price, and the currentIssue date. It should support Delete and Update.
+Create a MagazineForm.jsx that handles the specific fields for a Magazine (title, price, orderQty, currentIssue).
+Update App.jsx to include a acousticguitars state and fetch data from /api/acousticguitars.
+Update the Routing in App.jsx so that /acousticguitars shows the list and /add-acousticguitar shows the form.
+Update Navbar.jsx to include links for these new routes. Match the existing styling and logic patterns (Fetch API, Spread Operator, etc.) exactly."
