@@ -15,11 +15,11 @@ function Navbar() {
             <Link to="/inventory" style={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}>📚 View Inventory</Link>
             <Link to="/add" style={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}>➕ Add New Book</Link>
             <Link to="/magazines" style={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}>Magazines</Link>
-            <Link to="/add-magazine" style={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}>Add Magazine</Link>
+            <Link to="/add-magazine" style={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}>➕ Add Magazine</Link>
             <Link to="/electricguitars" style={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}>Electric Guitars</Link>
-            <Link to="/add-electric-guitar" style={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}>Add Electric Guitar</Link>
+            <Link to="/add-electric-guitar" style={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}>➕ Add Electric Guitar</Link>
             <Link to="/acousticguitars" style={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}>Acoustic Guitars</Link>
-            <Link to="/add-acoustic-guitar" style={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}>Add Acoustic Guitar</Link>
+            <Link to="/add-acoustic-guitar" style={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}>➕ Add Acoustic Guitar</Link>
         </nav>
     );
 }

@@ -10,13 +10,22 @@ function AcousticGuitarForm({ onAcousticGuitarAdded }) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+
+        const parsedPrice = Number(price);
+
+        if (!brand.trim() || !model.trim() || !Number.isFinite(parsedPrice) || !Number.isInteger(Number(numberOfStrings))) {
+            setSubmitError('Please enter valid values for all fields.');
+            return;
+        }
+
         const newAcousticGuitar = {
-            brand,
-            model,
+            brand: brand.trim(),
+            model: model.trim(),
             hasCutaway,
-            numberOfStrings,
-            price: parseFloat(price),
+            numberOfStrings: Number(numberOfStrings),
+            price: parsedPrice,
         };
+
         fetch('/api/acousticguitars', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -29,13 +38,12 @@ function AcousticGuitarForm({ onAcousticGuitarAdded }) {
                 return response.json();
             })
             .then(savedAcousticGuitar => {
-                alert("AcousticGuitar Saved!");
-                onAcousticGuitarAdded(savedAcousticGuitar); // Tell the parent to update the list
-                // 4. Clear the form
+                alert("Acoustic Guitar Saved!");
+                onAcousticGuitarAdded(savedAcousticGuitar);
                 setBrand('');
                 setModel('');
                 setHasCutaway(false);
-                setNumberOfStrings(''); // Reset to an empty string instead of savedAcousticGuitar
+                setNumberOfStrings('');
                 setPrice('');
                 setSubmitError('');
             })
@@ -43,50 +51,21 @@ function AcousticGuitarForm({ onAcousticGuitarAdded }) {
     };
 
     return (
-        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            <input
-                type="text"
-                placeholder="Brand"
-                value={brand}
-                onChange={(e) => setBrand(e.target.value)}
-                required
-            />
-            <input
-                type="text"
-                placeholder="Model"
-                value={model}
-                onChange={(e) => setModel(e.target.value)}
-                required
-            />
-
+        <form onSubmit={handleSubmit} style={{ border: '2px solid blue', padding: '20px', marginBottom: '20px' }}>
+            <h3>Add New Acoustic Guitar</h3>
+            <input type="text" placeholder="Brand" value={brand} onChange={(e) => setBrand(e.target.value)} required />
+            <input type="text" placeholder="Model" value={model} onChange={(e) => setModel(e.target.value)} required />
             <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
                 <label>Cutaway?</label>
-                <select
-                    value={hasCutaway ? 'yes' : 'no'}
-                    onChange={(e) => setHasCutaway(e.target.value === 'yes')}
-                    required
-                >
+                <select value={hasCutaway ? 'yes' : 'no'} onChange={(e) => setHasCutaway(e.target.value === 'yes')} required>
                     <option value="yes">Yes</option>
                     <option value="no">No</option>
                 </select>
             </div>
-
-            <input
-                type="number"
-                placeholder="number of strings"
-                value={numberOfStrings}
-                onChange={(e) => setNumberOfStrings(e.target.value)}
-                required
-            />
-
-            <input
-                type="number"
-                placeholder="Price"
-                value={price}
-                onChange={(e) => setPrice(e.target.value)}
-                required
-            />
-            <button type="submit" style={{ backgroundColor: '#28a745', color: 'white' }}>Add Acoustic Guitar</button>
+            <input type="number" placeholder="Number of Strings" value={numberOfStrings} onChange={(e) => setNumberOfStrings(e.target.value)} required min="1" step="1" />
+            <input type="number" placeholder="Price" value={price} onChange={(e) => setPrice(e.target.value)} required min="0" step="0.01" />
+            {submitError && <p style={{ color: '#b00020', margin: '8px 0 0' }}>{submitError}</p>}
+            <button type="submit">Save to Database</button>
         </form>
     );
 }
