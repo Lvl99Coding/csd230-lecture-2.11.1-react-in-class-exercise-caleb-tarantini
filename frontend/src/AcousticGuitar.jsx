@@ -1,7 +1,10 @@
 // frontend/src/AcousticGuitar.tsx
 import { useState } from 'react';
+import { useAuth } from './provider/authProvider'; // Adjust the import based on your folder structure
 
 function AcousticGuitar({ id, brand, model, numberOfStrings, hasCutaway, price, onDelete, onUpdate }) {
+    const { isAdmin } = useAuth(); // Get the isAdmin value from context
+
     // 1. Local state for "Edit Mode"
     const [isEditing, setIsEditing] = useState(false);
     const [tempBrand, setTempBrand] = useState(brand);
@@ -59,8 +62,12 @@ function AcousticGuitar({ id, brand, model, numberOfStrings, hasCutaway, price, 
             </div>
 
             <div className="acoustic-guitar-actions">
-                <button onClick={() => setIsEditing(true)} style={{ backgroundColor: '#ffc107', marginRight: '5px' }}>Edit</button>
-                <button onClick={() => onDelete(id)} style={{ backgroundColor: '#ff4444', color: 'white' }}>Delete</button>
+                {isAdmin && (
+                    <>
+                        <button onClick={() => setIsEditing(true)} style={{ backgroundColor: '#ffc107', marginRight: '5px' }}>Edit</button>
+                        <button onClick={() => onDelete(id)} style={{ backgroundColor: '#ff4444', color: 'white' }}>Delete</button>
+                    </>
+                )}
             </div>
         </div>
     );

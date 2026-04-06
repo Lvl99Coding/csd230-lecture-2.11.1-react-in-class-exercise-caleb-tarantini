@@ -1,6 +1,7 @@
 import { useState } from 'react';
+import { useAuth } from "./provider/authProvider";
 
-function MagazineForm({ onMagazineAdded }) {
+function MagazineForm({ onMagazineAdded, api }) {
     // 1. Define state for each input field
     const [title, setTitle] = useState('');
     const [price, setPrice] = useState('');
@@ -10,7 +11,7 @@ function MagazineForm({ onMagazineAdded }) {
     const [submitError, setSubmitError] = useState('');
 
     // 2. The Submit Handler
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault(); // Stop the page from reloading!
 
         const parsedPrice = price.trim() === '' ? null : Number(price);
@@ -28,30 +29,22 @@ function MagazineForm({ onMagazineAdded }) {
             currentIssue,
         };
 
-        // 3. POST to Spring Boot
-        fetch('/api/magazines', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(newMagazine),
-        })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Unable to save magazine');
-                }
-                return response.json();
-            })
-            .then(savedMagazine => {
-                alert("Magazine Saved!");
-                onMagazineAdded(savedMagazine); // Tell the parent to update the list
-                // 4. Clear the form
-                setTitle('');
-                setPrice('');
-                setCopies(1);
-                setOrderQty('');
-                setCurrentIssue('');
-                setSubmitError('');
-            })
-            .catch(() => setSubmitError('Unable to save magazine. Please try again.'));
+        try {
+            const res = await api.post('magazines', newMagazine);
+
+            alert("Magazine added successfully.");
+            onMagazineAdded(res.data);
+
+            setTitle('');
+            setPrice('');
+            setCopies(1);
+            setOrderQty(1);
+            setCurrentIssue('');
+            setSubmitError('');
+        } catch (error) {
+            console.error("Save Error", error.response?.data || error.message);
+            alert('Unable to save magazine. Please try again.');
+        }
     };
 
     return (

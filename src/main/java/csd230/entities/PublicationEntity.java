@@ -17,7 +17,7 @@ public abstract class PublicationEntity extends ProductEntity {
         if (copies != null && copies > 0) { copies--; System.out.println("Sold '" + title + "'. Remaining copies: " + copies); }
         else { System.out.println("Cannot sell '" + title + "'. Out of stock."); }
     }
-    @Override public double getPrice() { return price; }
+    @Override public Double getPrice() { return price; }
 
     public String getTitle() { return title; }
     public void setTitle(String t) { this.title = t; }

@@ -67,7 +67,7 @@ public abstract class GuitarEntity extends ProductEntity {
     }
 
     @Override
-    public double getPrice() {
+    public Double getPrice() {
         return price;
     }
 

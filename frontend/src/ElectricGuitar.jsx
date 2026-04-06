@@ -1,7 +1,10 @@
 // frontend/src/ElectricGuitar.tsx
 import { useState } from 'react';
+import { useAuth } from './provider/authProvider'; // Adjust the path as necessary
 
 function ElectricGuitar({ id, brand, model, numberOfStrings, numberOfPickups, price, onDelete, onUpdate }) {
+    const { isAdmin } = useAuth(); // Get the isAdmin value from context
+
     // 1. Local state for "Edit Mode"
     const [isEditing, setIsEditing] = useState(false);
     const [tempBrand, setTempBrand] = useState(brand);
@@ -29,15 +32,15 @@ function ElectricGuitar({ id, brand, model, numberOfStrings, numberOfPickups, pr
     // 3. Conditional Rendering: EDIT MODE
     if (isEditing) {
         return (
-            <div className="electric-guitar-row editing" style={{ border: '2px solid #4444ff', margin: '10px 0', padding: '15px', borderRadius: '8px', display: 'flex', gap: '10px', backgroundColor: '#eef' }}>
+            <div className="electric-guitar-row editing">
                 <input type="text" value={tempBrand} onChange={(e) => setTempBrand(e.target.value)} style={{ flex: 2 }} />
                 <input type="text" value={tempModel} onChange={(e) => setTempModel(e.target.value)} style={{ flex: 1 }} />
                 <input type="number" value={tempNumberOfStrings} onChange={(e) => setTempNumberOfStrings(e.target.value === '' ? '' : parseInt(e.target.value))} style={{ width: '80px' }} />
                 <input type="number" value={tempNumberOfPickups} onChange={(e) => setTempNumberOfPickups(parseInt(e.target.value))} style={{ width: '80px' }} />
                 <input type="number" value={tempPrice} onChange={(e) => setTempPrice(e.target.value)} style={{ width: '80px' }} />
 
-                <button onClick={handleSave} style={{ backgroundColor: '#28a745', color: 'white' }}>Save</button>
-                <button onClick={() => setIsEditing(false)} style={{ backgroundColor: '#6c757d', color: 'white' }}>Cancel</button>
+                <button onClick={handleSave} className="btn-save">Save</button>
+                <button onClick={() => setIsEditing(false)}>Cancel</button>
             </div>
         );
     }
@@ -53,8 +56,12 @@ function ElectricGuitar({ id, brand, model, numberOfStrings, numberOfPickups, pr
             </div>
 
             <div className="electric-guitar-actions">
-                <button onClick={() => setIsEditing(true)} style={{ backgroundColor: '#ffc107', marginRight: '5px' }}>Edit</button>
-                <button onClick={() => onDelete(id)} style={{ backgroundColor: '#ff4444', color: 'white' }}>Delete</button>
+                {isAdmin && (
+                    <>
+                        <button onClick={() => setIsEditing(true)} style={{ backgroundColor: '#ffc107', marginRight: '5px' }}>Edit</button>
+                        <button onClick={() => onDelete(id)} style={{ backgroundColor: '#ff4444', color: 'white' }}>Delete</button>
+                    </>
+                )}
             </div>
         </div>
     );

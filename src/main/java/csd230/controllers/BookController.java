@@ -2,61 +2,63 @@ package csd230.controllers;
 
 import csd230.entities.BookEntity;
 import csd230.repositories.BookRepository;
-import org.springframework.http.ResponseEntity;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
 
-        import java.util.List;
+import java.util.List;
 
+@Tag(name = "Book REST API", description = "JSON API for managing books")
 @RestController
-@RequestMapping("/api/books")
-@CrossOrigin(origins = "http://localhost:5173") // Allow Vite React App
+@RequestMapping("/api/rest/books")
+@CrossOrigin(origins = "*")
 public class BookController {
-
     private final BookRepository bookRepository;
 
     public BookController(BookRepository bookRepository) {
         this.bookRepository = bookRepository;
     }
 
-    // GET all books
+    @Operation(summary = "Get all books as JSON")
     @GetMapping
-    public List<BookEntity> getAllBooks() {
+    public List<BookEntity> all() {
         return bookRepository.findAll();
     }
 
-    // GET single book
+    @Operation(summary = "Get a single book by ID")
     @GetMapping("/{id}")
-    public ResponseEntity<BookEntity> getBookById(@PathVariable Long id) {
+    public BookEntity getBook(@PathVariable Long id) {
         return bookRepository.findById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+                .orElseThrow(() -> new BookNotFoundException(id));
     }
 
-    // POST create book
+    @Operation(summary = "Create a new book")
     @PostMapping
-    public BookEntity createBook(@RequestBody BookEntity book) {
-        return bookRepository.save(book);
+    public BookEntity newBook(@RequestBody BookEntity newBook) {
+        return bookRepository.save(newBook);
     }
 
-    // PUT update book
+    @Operation(summary = "Update or Replace a book")
     @PutMapping("/{id}")
-    public ResponseEntity<BookEntity> updateBook(@PathVariable Long id, @RequestBody BookEntity bookDetails) {
-        return bookRepository.findById(id).map(book -> {
-            book.setTitle(bookDetails.getTitle());
-            book.setAuthor(bookDetails.getAuthor());
-            book.setPrice(bookDetails.getPrice());
-            book.setCopies(bookDetails.getCopies());
-            return ResponseEntity.ok(bookRepository.save(book));
-        }).orElse(ResponseEntity.notFound().build());
+    public BookEntity replaceBook(@RequestBody BookEntity newBook, @PathVariable Long id) {
+        return bookRepository.findById(id)
+                .map(book -> {
+                    book.setAuthor(newBook.getAuthor());
+                    book.setTitle(newBook.getTitle());
+                    book.setPrice(newBook.getPrice());
+                    book.setCopies(newBook.getCopies());
+                    return bookRepository.save(book);
+                })
+                .orElseGet(() -> {
+                    newBook.setId(id);
+                    return bookRepository.save(newBook);
+                });
     }
 
-    // DELETE book
+    @Operation(summary = "Delete a book")
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteBook(@PathVariable Long id) {
-        if (bookRepository.existsById(id)) {
-            bookRepository.deleteById(id);
-            return ResponseEntity.ok().build();
-        }
-        return ResponseEntity.notFound().build();
+    public void deleteBook(@PathVariable Long id) {
+        bookRepository.deleteById(id);
     }
 }
+

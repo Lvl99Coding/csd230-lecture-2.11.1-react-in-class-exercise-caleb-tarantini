@@ -1,16 +1,17 @@
 package csd230.controllers;
 
 import csd230.entities.MagazineEntity;
-import csd230.entities.MagazineEntity;
 import csd230.repositories.MagazineRepository;
-import org.springframework.http.ResponseEntity;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Tag(name = "Magazine REST API", description = "JSON API for managing magazines")
 @RestController
-@RequestMapping("/api/magazines")
-@CrossOrigin(origins = "http://localhost:5173") // Allow Vite React App
+@RequestMapping("/api/rest/magazines")
+@CrossOrigin(origins = "*") // Allows your Vite React app to access this
 public class MagazineController {
 
     private final MagazineRepository magazineRepository;
@@ -19,45 +20,49 @@ public class MagazineController {
         this.magazineRepository = magazineRepository;
     }
 
-    // GET all magazines
+    @Operation(summary = "Get all magazines as JSON")
     @GetMapping
-    public List<MagazineEntity> getAllMagazines() {
+    public List<MagazineEntity> all() {
         return magazineRepository.findAll();
     }
 
-    // GET single magazine
+    @Operation(summary = "Get a single magazine by ID")
     @GetMapping("/{id}")
-    public ResponseEntity<MagazineEntity> getMagazineById(@PathVariable Long id) {
-        return magazineRepository.findById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public MagazineEntity getMagazine(@PathVariable Long id) {
+        return magazineRepository.findById(id).orElseThrow();
     }
 
-    // POST create magazine
+    @Operation(summary = "Create a new magazine")
     @PostMapping
-    public MagazineEntity createMagazine(@RequestBody MagazineEntity magazine) {
-        return magazineRepository.save(magazine);
+    public MagazineEntity newMagazine(@RequestBody MagazineEntity newMagazine) {
+        return magazineRepository.save(newMagazine);
     }
 
-    // PUT update magazine
+    @Operation(summary = "Update or Replace a magazine")
     @PutMapping("/{id}")
-    public ResponseEntity<MagazineEntity> updateMagazine(@PathVariable Long id, @RequestBody MagazineEntity magazineDetails) {
-        return magazineRepository.findById(id).map(magazine -> {
-            magazine.setTitle(magazineDetails.getTitle());
-            magazine.setPrice(magazineDetails.getPrice());
-            magazine.setCopies(magazineDetails.getCopies());
-            magazine.setCurrentIssue(magazineDetails.getCurrentIssue());
-            return ResponseEntity.ok(magazineRepository.save(magazine));
-        }).orElse(ResponseEntity.notFound().build());
+    public MagazineEntity replaceMagazine(@RequestBody MagazineEntity newMag, @PathVariable Long id) {
+        return magazineRepository.findById(id)
+                .map(mag -> {
+                    // Inherited from PublicationEntity
+                    mag.setTitle(newMag.getTitle());
+                    mag.setPrice(newMag.getPrice());
+                    mag.setCopies(newMag.getCopies());
+
+                    // Specific to MagazineEntity
+                    mag.setOrderQty(newMag.getOrderQty());
+                    mag.setCurrentIssue(newMag.getCurrentIssue());
+
+                    return magazineRepository.save(mag);
+                })
+                .orElseGet(() -> {
+                    newMag.setId(id);
+                    return magazineRepository.save(newMag);
+                });
     }
 
-    // DELETE magazine
+    @Operation(summary = "Delete a magazine")
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteMagazine(@PathVariable Long id) {
-        if (magazineRepository.existsById(id)) {
-            magazineRepository.deleteById(id);
-            return ResponseEntity.ok().build();
-        }
-        return ResponseEntity.notFound().build();
+    public void deleteMagazine(@PathVariable Long id) {
+        magazineRepository.deleteById(id);
     }
 }
