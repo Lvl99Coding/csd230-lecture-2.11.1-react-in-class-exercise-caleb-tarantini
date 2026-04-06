@@ -31,3 +31,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# Exclude MySQL volume files
+volumes/mysql/

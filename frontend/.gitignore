@@ -12,6 +12,9 @@ dist
 dist-ssr
 *.local
 
+# Exclude MySQL volume files
+volumes/mysql/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
