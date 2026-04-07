@@ -4,7 +4,7 @@ on:
 
   push:
 
-    branches: [ "main", "master", "lab7-cloud-deployment-and-cicd-pipelines" ]
+    branches: [ "main", "master", "lab7-cloud-deployment-and-cicd-pipelines", "lab8-refine-and-update-application" ]
 
 jobs:
 
