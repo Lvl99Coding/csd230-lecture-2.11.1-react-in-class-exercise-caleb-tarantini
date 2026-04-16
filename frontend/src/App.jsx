@@ -16,6 +16,14 @@ import ElectricGuitar from './ElectricGuitar.jsx';
 import AcousticGuitar from './AcousticGuitar.jsx';
 import AcousticGuitarForm from './AcousticGuitarForm.jsx';
 import ElectricGuitarForm from './ElectricGuitarForm';
+import Ticket from './Ticket';
+import TicketForm from './TicketForm';
+import DiscMag from './DiscMag';
+import DiscMagForm from './DiscMagForm';
+import ComicBook from './ComicBook';
+import ComicBookForm from './ComicBookForm';
+import Tablet from './Tablet';
+import TabletForm from './TabletForm';
 import './App.css'
 
 function App() {
@@ -25,6 +33,10 @@ function App() {
     const [magazines, setMagazines] = useState([]);
     const [electricGuitars, setElectricGuitars] = useState([]);
     const [acousticGuitars, setAcousticGuitars] = useState([]);
+    const [tickets, setTickets] = useState([]);
+    const [discMags, setDiscMags] = useState([]);
+    const [comicBooks, setComicBooks] = useState([]);
+    const [tablets, setTablets] = useState([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -35,18 +47,26 @@ function App() {
         }
         const loadInitialData = async () => {
             try {
-                const [booksRes, magsRes, electricGuitarsRes, acousticGuitarsRes, cartRes] = await Promise.all([
+                const [booksRes, magsRes, electricGuitarsRes, acousticGuitarsRes, cartRes, ticketsRes, discMagsRes, comicBooksRes, tabletsRes] = await Promise.all([
                     api.get('/books'),
                     api.get('/magazines'),
                     api.get('/electricguitars'), // Correctly fetch electric guitars
                     api.get('/acousticguitars'), // Correctly fetch acoustic guitars
-                    api.get('/cart')
+                    api.get('/cart'),
+                    api.get('/tickets'),
+                    api.get('/discmags'),
+                    api.get('/comicbooks'),
+                    api.get('/tablets')
                 ]);
                 setBooks(booksRes.data);
                 setMagazines(magsRes.data);
                 setElectricGuitars(electricGuitarsRes.data); // Correctly assign electric guitars data
                 setAcousticGuitars(acousticGuitarsRes.data); // Correctly assign acoustic guitars data
                 setCartCount(cartRes.data.products.length);
+                setTickets(ticketsRes.data);
+                setDiscMags(discMagsRes.data);
+                setComicBooks(comicBooksRes.data);
+                setTablets(tabletsRes.data);
             } catch (err) {
                 console.error("Failed to load data", err);
             } finally {
@@ -78,6 +98,7 @@ function App() {
     };
 
     const handleDeleteElectricGuitar = async (id) => {
+        if (!window.confirm("Delete guitar?")) return;
         await api.delete(`/electricguitars/${id}`);
         setElectricGuitars(electricGuitars.filter(ele => ele.id !== id));
     };
@@ -88,6 +109,7 @@ function App() {
     };
 
     const handleDeleteAcousticGuitar = async (id) => {
+        if (!window.confirm("Delete guitar?")) return;
         await api.delete(`/acousticguitars/${id}`);
         setAcousticGuitars(acousticGuitars.filter(acou => acou.id !== id));
     };
@@ -97,10 +119,65 @@ function App() {
         setAcousticGuitars(acousticGuitars.map(acou => acou.id === id ? res.data : acou));
     };
 
+    const handleDeleteTicket = async (id) => {
+        if (!window.confirm("Delete ticket?")) return;
+        await api.delete(`/tickets/${id}`);
+        setTickets(tickets.filter(t => t.id !== id));
+    };
+
+    const handleUpdateTicket = async (id, data) => {
+        const res = await api.put(`/tickets/${id}`, data);
+        setTickets(tickets.map(t => t.id === id ? res.data : t));
+    };
+
+    const handleDeleteDiscMag = async (id) => {
+        if (!window.confirm("Delete DiscMag?")) return;
+        await api.delete(`/discmags/${id}`);
+        setDiscMags(discMags.filter(d => d.id !== id));
+    };
+
+    const handleUpdateDiscMag = async (id, data) => {
+        const res = await api.put(`/discmags/${id}`, data);
+        setDiscMags(discMags.map(d => d.id === id ? res.data : d));
+    };
+
+    const handleDeleteMagazine = async (id) => {
+        if (!window.confirm("Delete magazine?")) return;
+        await api.delete(`/magazines/${id}`);
+        setMagazines(magazines.filter(mag => mag.id !== id));
+    };
+
+    const handleUpdateMagazine = async (id, data) => {
+        const res = await api.put(`/magazines/${id}`, data);
+        setMagazines(magazines.map(mag => mag.id === id ? res.data : mag));
+    };
+
+    const handleDeleteComicBook = async (id) => {
+        if (!window.confirm("Delete comic book?")) return;
+        await api.delete(`/comicbooks/${id}`);
+        setComicBooks(comicBooks.filter(cb => cb.id !== id));
+    };
+
+    const handleUpdateComicBook = async (id, data) => {
+        const res = await api.put(`/comicbooks/${id}`, data);
+        setComicBooks(comicBooks.map(cb => cb.id === id ? res.data : cb));
+    };
+
+    const handleDeleteTablet = async (id) => {
+        if (!window.confirm("Delete tablet?")) return;
+        await api.delete(`/tablets/${id}`);
+        setTablets(tablets.filter(tab => tab.id !== id));
+    };
+
+    const handleUpdateTablet = async (id, data) => {
+        const res = await api.put(`/tablets/${id}`, data);
+        setTablets(tablets.map(tab => tab.id === id ? res.data : tab));
+    };
+
     if (loading) return <h2>Loading...</h2>;
 
     return (
-        <div className="app-container" style={{ maxWidth: '900px', margin: '0 auto', padding: '20px' }}>
+        <div className="app-container" style={{ maxWidth: '1500px', margin: '0 auto', padding: '20px' }}>
 
             {token && <Navbar cartCount={cartCount} />}
 
@@ -152,8 +229,8 @@ function App() {
                             {magazines.map(m => (
                                 <Magazine key={m.id} {...m}
                                           onAddToCart={handleAddToCart}
-                                          onDelete={(id) => api.delete(`/magazines/${id}`).then(() => setMagazines(magazines.filter(mag => mag.id !== id)))}
-                                          onUpdate={(id, data) => api.put(`/magazines/${id}`, data).then(res => setMagazines(magazines.map(mag => mag.id === id ? res.data : mag)))}
+                                          onDelete={handleDeleteMagazine}
+                                          onUpdate={handleUpdateMagazine}
                                 />
                             ))}
                         </div>
@@ -163,6 +240,58 @@ function App() {
                     <Route path="/add-magazine" element={<MagazineForm onMagazineAdded={(m) => setMagazines([...magazines, m])} api={api} />} />
                     <Route path="/add-electric-guitar" element={<ElectricGuitarForm onElectricGuitarAdded={(e) => setElectricGuitars([...electricGuitars, e])} api={api} />} />
                     <Route path="/add-acoustic-guitar" element={<AcousticGuitarForm onAcousticGuitarAdded={(a) => setAcousticGuitars([...acousticGuitars, a])} api={api} />} />
+                    <Route path="/tickets" element={
+                        <div className="ticket-list">
+                            <h1>Tickets</h1>
+                            {tickets.map(t => (
+                                <Ticket key={t.id} {...t}
+                                        onAddToCart={handleAddToCart}
+                                        onDelete={handleDeleteTicket}
+                                        onUpdate={handleUpdateTicket}
+                                />
+                            ))}
+                        </div>
+                    } />
+                    <Route path="/discmags" element={
+                        <div className="discmag-list">
+                            <h1>DiscMags</h1>
+                            {discMags.map(d => (
+                                <DiscMag key={d.id} {...d}
+                                         onAddToCart={handleAddToCart}
+                                         onDelete={handleDeleteDiscMag}
+                                         onUpdate={handleUpdateDiscMag}
+                                />
+                            ))}
+                        </div>
+                    } />
+                    <Route path="/add-ticket" element={<TicketForm onTicketAdded={(t) => setTickets([...tickets, t])} api={api} />} />
+                    <Route path="/add-discmag" element={<DiscMagForm onDiscMagAdded={(d) => setDiscMags([...discMags, d])} api={api} />} />
+                    <Route path="/comicbooks" element={
+                        <div className="comicbook-list">
+                            <h1>Comic Books</h1>
+                            {comicBooks.map(cb => (
+                                <ComicBook key={cb.id} {...cb}
+                                          onAddToCart={handleAddToCart}
+                                          onDelete={handleDeleteComicBook}
+                                          onUpdate={handleUpdateComicBook}
+                                />
+                            ))}
+                        </div>
+                    } />
+                    <Route path="/add-comicbook" element={<ComicBookForm onComicBookAdded={(cb) => setComicBooks([...comicBooks, cb])} api={api} />} />
+                    <Route path="/tablets" element={
+                        <div className="tablet-list">
+                            <h1>Tablets</h1>
+                            {tablets.map(tab => (
+                                <Tablet key={tab.id} {...tab}
+                                       onAddToCart={handleAddToCart}
+                                       onDelete={handleDeleteTablet}
+                                       onUpdate={handleUpdateTablet}
+                                />
+                            ))}
+                        </div>
+                    } />
+                    <Route path="/add-tablet" element={<TabletForm onTabletAdded={(tab) => setTablets([...tablets, tab])} api={api} />} />
                     <Route path="/logout" element={<Logout />} />
                 </Route>
             </Routes>

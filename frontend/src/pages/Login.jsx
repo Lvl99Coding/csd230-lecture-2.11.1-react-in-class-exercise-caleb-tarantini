@@ -73,46 +73,32 @@ const Login = () => {
 
             <br />
 
-            <form onSubmit={handleLogin} style={{ display: "inline-block", textAlign: "left", minWidth: "300px" }}>
-                <div style={{ marginBottom: "15px" }}>
+            <form onSubmit={handleLogin} className="form-style">
+                <div className="form-group">
                     <label>Username:</label><br/>
                     <input
                         type="text"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         required
-                        style={{ width: "100%", padding: "8px", boxSizing: "border-box" }}
+                        className="form-input"
                         placeholder="e.admin"
                     />
-                    <small style={{display:"block", color:"#888", marginTop: "4px"}}>Hint: try 'admin' or 'user'</small>
+                    <small className="form-hint">Hint: try 'admin' or 'user'</small>
                 </div>
 
-                <div style={{ marginBottom: "20px" }}>
+                <div className="form-group">
                     <label>Password:</label><br/>
                     <input
                         type="password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         required
-                        style={{ width: "100%", padding: "8px", boxSizing: "border-box" }}
+                        className="form-input"
                     />
                 </div>
 
-                <button
-                    type="submit"
-                    style={{
-                        width: "100%",
-                        padding: "10px",
-                        backgroundColor: "#007bff",
-                        color: "white",
-                        border: "none",
-                        borderRadius: "5px",
-                        cursor: "pointer",
-                        fontSize: "16px"
-                    }}
-                >
-                    Login
-                </button>
+                <button type="submit" className="form-button">Login</button>
             </form>
         </div>
     );

@@ -21,11 +21,15 @@ function Navbar({ cartCount }) {
             borderRadius: '8px'
         }}>
             <Link to="/" style={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}>🏠 Home</Link>
-            <Link to="/inventory" style={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}>📚 View Inventory</Link>
+            <Link to="/inventory" style={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}>📚 Books</Link>
             <Link to="/magazines" style={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}>📰Magazines</Link>
             <Link to="/cart">🛒 Cart ({cartCount})</Link>
             <Link to="/electricguitars" style={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}>🎸 Electric Guitars</Link>
             <Link to="/acousticguitars" style={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}>🎻 Acoustic Guitars</Link>
+            <Link to="/tickets" style={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}>🎟️ Tickets</Link>
+            <Link to="/discmags" style={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}>📀 DiscMags</Link>
+            <Link to="/comicbooks" style={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}>📚 Comic Books</Link>
+            <Link to="/tablets" style={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}>💻 Tablets</Link>
 
             {isAdmin && (
                 <div style={{ position: 'relative' }}>
@@ -37,7 +41,11 @@ function Navbar({ cartCount }) {
                             <Link to="/add" style={{ display: 'block', color: 'white', textDecoration: 'none', marginBottom: '5px' }}>➕ Add New Book</Link>
                             <Link to="/add-magazine" style={{ display: 'block', color: 'white', textDecoration: 'none', marginBottom: '5px' }}>➕ Add Magazine</Link>
                             <Link to="/add-electric-guitar" style={{ display: 'block', color: 'white', textDecoration: 'none', marginBottom: '5px' }}>➕ Add Electric Guitar</Link>
-                            <Link to="/add-acoustic-guitar" style={{ display: 'block', color: 'white', textDecoration: 'none' }}>➕ Add Acoustic Guitar</Link>
+                            <Link to="/add-acoustic-guitar" style={{ display: 'block', color: 'white', textDecoration: 'none', marginBottom: '5px' }}>➕ Add Acoustic Guitar</Link>
+                            <Link to="/add-ticket" style={{ display: 'block', color: 'white', textDecoration: 'none', marginBottom: '5px' }}>➕ Add Ticket</Link>
+                            <Link to="/add-discmag" style={{ display: 'block', color: 'white', textDecoration: 'none', marginBottom: '5px' }}>➕ Add DiscMag</Link>
+                            <Link to="/add-comicbook" style={{ display: 'block', color: 'white', textDecoration: 'none', marginBottom: '5px' }}>➕ Add Comic Book</Link>
+                            <Link to="/add-tablet" style={{ display: 'block', color: 'white', textDecoration: 'none' }}>➕ Add Tablet</Link>
                         </div>
                     )}
                 </div>

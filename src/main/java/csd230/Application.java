@@ -3,11 +3,7 @@ package csd230;
 
 import com.github.javafaker.Commerce;
 import com.github.javafaker.Faker;
-import csd230.entities.BookEntity;
-import csd230.entities.CartEntity;
-import csd230.entities.ElectricGuitarEntity;
-import csd230.entities.AcousticGuitarEntity;
-import csd230.entities.UserEntity;
+import csd230.entities.*;
 import csd230.repositories.CartEntityRepository;
 import csd230.repositories.ProductEntityRepository;
 import csd230.repositories.UserEntityRepository;
@@ -86,14 +82,60 @@ public class Application implements CommandLineRunner {
                     faker.number().randomDouble(2, 500, 2000)
             );
 
+            MagazineEntity magazine = new MagazineEntity(
+                    faker.book().title(),
+                    faker.number().randomDouble(2, 5, 20),
+                    faker.number().numberBetween(1, 100),
+                    faker.number().numberBetween(1, 12),
+                    faker.date().past(365, java.util.concurrent.TimeUnit.DAYS).toInstant().atZone(java.time.ZoneId.systemDefault()).toLocalDate()
+            );
+
+            TicketEntity ticket = new TicketEntity(
+                    faker.rockBand().name(),
+                    faker.number().randomDouble(2, 20, 200)
+            );
+
+            DiscMagEntity discMag = new DiscMagEntity(
+                    faker.book().title(),
+                    faker.number().randomDouble(2, 5, 20),
+                    faker.number().numberBetween(1, 100),
+                    faker.number().numberBetween(1, 12),
+                    faker.date().past(365, java.util.concurrent.TimeUnit.DAYS).toInstant().atZone(java.time.ZoneId.systemDefault()).toLocalDate(),
+                    faker.random().nextBoolean()
+            );
+
+            ComicBookEntity comicBook = new ComicBookEntity(
+                    faker.book().title(),
+                    faker.book().author(),
+                    faker.number().randomDouble(2, 5, 50),
+                    faker.number().numberBetween(1, 30),
+                    faker.book().genre()
+            );
+
+            TabletEntity tablet = new TabletEntity(
+                    "Reading Tablet: " + faker.company().name(),
+                    faker.number().randomDouble(2, 7, 15),
+                    faker.number().randomDouble(2, 100, 1000)
+            );
+
             // Save to database
             productRepository.save(book);
             productRepository.save(eguitar);
             productRepository.save(acguitar);
+            productRepository.save(discMag);
+            productRepository.save(magazine);
+            productRepository.save(ticket);
+            productRepository.save(comicBook);
+            productRepository.save(tablet);
 
             System.out.println("Saved Book " + (i + 1) + ": " + title + " by " + author);
             System.out.println("Saved Electric Guitar " + (i + 1) + ": " + eguitar.getBrand() + " " + eguitar.getModel());
             System.out.println("Saved Acoustic Guitar " + (i + 1) + ": " + acguitar.getBrand() + " " + acguitar.getModel());
+            System.out.println("Saved Magazine " + (i + 1) + ": " + magazine.getTitle());
+            System.out.println("Saved Disc Magazine " + (i + 1) + ": " + discMag.getTitle());
+            System.out.println("Saved Ticket " + (i + 1) + ": " + ticket.getDescription());
+            System.out.println("Saved Comic Book " + (i + 1) + ": " + comicBook.getTitle());
+            System.out.println("Saved Tablet " + (i + 1) + ": " + tablet.toString());
         }
 
 
@@ -136,4 +178,3 @@ public class Application implements CommandLineRunner {
 
 
 }
-

@@ -48,15 +48,32 @@ function MagazineForm({ onMagazineAdded, api }) {
     };
 
     return (
-        <form onSubmit={handleSubmit} style={{ border: '2px solid blue', padding: '20px', marginBottom: '20px' }}>
-            <h3>Add New Magazine</h3>
-            <input type="text" placeholder="Title" value={title} onChange={(e) => setTitle(e.target.value)} required />
-            <input type="number" placeholder="Price" value={price} onChange={(e) => setPrice(e.target.value)} required min="0" step="0.01" />
-            <input type="number" placeholder="Copies" value={copies} onChange={(e) => setCopies(e.target.value)} required min="0" step="1" />
-            <input type="number" placeholder="Order Qty" value={orderQty} onChange={(e) => setOrderQty(e.target.value)} required min="0" step="1" />
-            <input type="date" placeholder="Current Issue" value={currentIssue} onChange={(e) => setCurrentIssue(e.target.value)} required />
+        <form onSubmit={handleSubmit} style={{ border: '2px solid blue', padding: '20px', marginBottom: '20px', display: 'flex', flexDirection: 'column', gap: '15px' }}>
+            <header style={{ backgroundColor: 'blue', padding: '10px', marginBottom: '15px' }}>
+                <h3 style={{ color: 'white', margin: 0 }}>Add New Magazine</h3>
+            </header>
+            <label>
+                Title:
+                <input type="text" placeholder="Title" value={title} onChange={(e) => setTitle(e.target.value)} required style={{ width: '100%', backgroundColor: '#f0f0f0', color: 'black' }} />
+            </label>
+            <label>
+                Price:
+                <input type="number" placeholder="Price" value={price} onChange={(e) => setPrice(e.target.value)} required min="0" step="0.01" style={{ width: '100%', backgroundColor: '#f0f0f0', color: 'black' }} />
+            </label>
+            <label>
+                Copies:
+                <input type="number" placeholder="Copies" value={copies} onChange={(e) => setCopies(e.target.value)} required min="0" step="1" style={{ width: '100%', backgroundColor: '#f0f0f0', color: 'black' }} />
+            </label>
+            <label>
+                Order Qty:
+                <input type="number" placeholder="Order Qty" value={orderQty} onChange={(e) => setOrderQty(e.target.value)} required min="0" step="1" style={{ width: '100%', backgroundColor: '#f0f0f0', color: 'black' }} />
+            </label>
+            <label>
+                Current Issue:
+                <input type="date" placeholder="Current Issue" value={currentIssue} onChange={(e) => setCurrentIssue(e.target.value)} required style={{ width: '100%', backgroundColor: '#f0f0f0', color: 'black' }} />
+            </label>
             {submitError && <p style={{ color: '#b00020', margin: '8px 0 0' }}>{submitError}</p>}
-            <button type="submit">Save to Database</button>
+            <button type="submit" style={{ alignSelf: 'flex-start' }}>Save to Database</button>
         </form>
     );
 }

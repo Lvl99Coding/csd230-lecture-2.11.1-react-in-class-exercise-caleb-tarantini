@@ -1,48 +1,39 @@
 import { useState } from 'react';
 import { useAuth } from "./provider/authProvider";
 
-function BookForm({ onBookAdded, api }) {
-    // 1. Define state for each input field
-    const [title, setTitle] = useState('');
-    const [author, setAuthor] = useState('');
+function TicketForm({ onTicketAdded, api }) {
+    const [description, setDescription] = useState('');
     const [price, setPrice] = useState('');
-    const [copies, setCopies] = useState(1);
     const [submitError, setSubmitError] = useState('');
-    const { isAdmin, token } = useAuth();
+    const { isAdmin } = useAuth();
 
-    // 2. The Submit Handler
     const handleSubmit = async (e) => {
-        e.preventDefault(); // Stop the page from reloading!
+        e.preventDefault();
 
         const parsedPrice = Number(price);
-        
-        if (!title.trim() || !author.trim() || !Number.isFinite(parsedPrice)) {
+
+        if (!description.trim() || !Number.isFinite(parsedPrice)) {
             setSubmitError('Please enter valid values for all fields.');
             return;
         }
 
-        const newBook = { 
-            title: title.trim(), 
-            author: author.trim(), 
-            price: parsedPrice, 
-            copies 
+        const newTicket = {
+            description: description.trim(),
+            price: parsedPrice
         };
 
-        // 3. POST to Spring Boot
         try {
-            const res = await api.post('books', newBook);
+            const res = await api.post('tickets', newTicket);
 
-            alert("Book added successfully.");
-            onBookAdded(res.data);
+            alert("Ticket added successfully.");
+            onTicketAdded(res.data);
 
-            setTitle('');
-            setAuthor('');
+            setDescription('');
             setPrice('');
-            setCopies(1);
             setSubmitError('');
         } catch (error) {
             console.error("Save Error", error.response?.data || error.message);
-            alert('Unable to save book. Please try again.');
+            alert('Unable to save ticket. Please try again.');
         }
     };
 
@@ -51,15 +42,11 @@ function BookForm({ onBookAdded, api }) {
             {isAdmin && (
                 <>
                     <header style={{ backgroundColor: 'blue', padding: '10px', marginBottom: '15px' }}>
-                        <h3 style={{ color: 'white', margin: 0 }}>Add New Book</h3>
+                        <h3 style={{ color: 'white', margin: 0 }}>Add New Ticket</h3>
                     </header>
                     <label>
-                        Title:
-                        <input type="text" placeholder="Title" value={title} onChange={(e) => setTitle(e.target.value)} required style={{ width: '100%', backgroundColor: '#f0f0f0', color: 'black' }} />
-                    </label>
-                    <label>
-                        Author:
-                        <input type="text" placeholder="Author" value={author} onChange={(e) => setAuthor(e.target.value)} required style={{ width: '100%', backgroundColor: '#f0f0f0', color: 'black' }} />
+                        Description:
+                        <input type="text" placeholder="Description" value={description} onChange={(e) => setDescription(e.target.value)} required style={{ width: '100%', backgroundColor: '#f0f0f0', color: 'black' }} />
                     </label>
                     <label>
                         Price:
@@ -69,9 +56,8 @@ function BookForm({ onBookAdded, api }) {
                     <button type="submit" style={{ alignSelf: 'flex-start' }}>Save to Database</button>
                 </>
             )}
-
         </form>
     );
 }
 
-export default BookForm;
+export default TicketForm;

@@ -4,8 +4,6 @@ import { useAuth } from "./provider/authProvider";
 function ElectricGuitarForm({ onElectricGuitarAdded, api }) {
     const [brand, setBrand] = useState('');
     const [model, setModel] = useState('');
-    const [numberOfStrings, setNumberOfStrings] = useState('');
-    const [numberOfPickups, setNumberOfPickups] = useState('');
     const [price, setPrice] = useState('');
     const [submitError, setSubmitError] = useState('');
     const { isAdmin, token } = useAuth();
@@ -15,7 +13,7 @@ function ElectricGuitarForm({ onElectricGuitarAdded, api }) {
 
         const parsedPrice = Number(price);
 
-        if (!brand.trim() || !model.trim() || !Number.isFinite(parsedPrice) || !Number.isInteger(Number(numberOfStrings)) || !Number.isInteger(Number(numberOfPickups))) {
+        if (!brand.trim() || !model.trim() || !Number.isFinite(parsedPrice)) {
             setSubmitError('Please enter valid values for all fields.');
             return;
         }
@@ -23,8 +21,6 @@ function ElectricGuitarForm({ onElectricGuitarAdded, api }) {
         const newElectricGuitar = {
             brand: brand.trim(),
             model: model.trim(),
-            numberOfStrings: Number(numberOfStrings),
-            numberOfPickups: Number(numberOfPickups),
             price: parsedPrice,
         };
 
@@ -33,14 +29,10 @@ function ElectricGuitarForm({ onElectricGuitarAdded, api }) {
 
             alert("Electric Guitar successfully saved to MySQL!");
 
-            alert("Electric Guitar Saved!");
-
             onElectricGuitarAdded(res.data);
 
             setBrand('');
             setModel('');
-            setNumberOfStrings('');
-            setNumberOfPickups('');
             setPrice('');
             setSubmitError('');
         }catch (err){
@@ -52,41 +44,35 @@ function ElectricGuitarForm({ onElectricGuitarAdded, api }) {
     };
 
     return (
-        <form onSubmit={handleSubmit} style={{ border: '2px solid blue', padding: '20px', marginBottom: '20px' }}>
+        <form onSubmit={handleSubmit} style={{ border: '2px solid blue', padding: '20px', marginBottom: '20px', display: 'flex', flexDirection: 'column', gap: '15px' }}>
             {isAdmin && (
                 <>
-                    <h3>Add New Electric Guitar</h3>
-                    <input type="text" placeholder="Brand" value={brand} onChange={(e) => setBrand(e.target.value)} required />
-                    <input type="text" placeholder="Model" value={model} onChange={(e) => setModel(e.target.value)} required />
-                    <input
-                        type="number"
-                        placeholder="Number of Strings"
-                        value={numberOfStrings}
-                        onChange={(e) => setNumberOfStrings(e.target.value)}
-                        required
-                        min="1"
-                        step="1"
-                    />
-                    <input
-                        type="number"
-                        placeholder="Number of Pickups"
-                        value={numberOfPickups}
-                        onChange={(e) => setNumberOfPickups(e.target.value)}
-                        required
-                        min="1"
-                        step="1"
-                    />
-                    <input
-                        type="number"
-                        placeholder="Price"
-                        value={price}
-                        onChange={(e) => setPrice(e.target.value)}
-                        required
-                        min="0"
-                        step="0.01"
-                    />
+                    <header style={{ backgroundColor: 'blue', padding: '10px', marginBottom: '15px' }}>
+                        <h3 style={{ color: 'white', margin: 0 }}>Add New Electric Guitar</h3>
+                    </header>
+                    <label>
+                        Brand:
+                        <input type="text" placeholder="Brand" value={brand} onChange={(e) => setBrand(e.target.value)} required style={{ width: '100%', backgroundColor: '#f0f0f0', color: 'black' }} />
+                    </label>
+                    <label>
+                        Model:
+                        <input type="text" placeholder="Model" value={model} onChange={(e) => setModel(e.target.value)} required style={{ width: '100%', backgroundColor: '#f0f0f0', color: 'black' }} />
+                    </label>
+                    <label>
+                        Price:
+                        <input
+                            type="number"
+                            placeholder="Price"
+                            value={price}
+                            onChange={(e) => setPrice(e.target.value)}
+                            required
+                            min="0"
+                            step="0.01"
+                            style={{ width: '100%', backgroundColor: '#f0f0f0', color: 'black' }}
+                        />
+                    </label>
                     {submitError && <p style={{ color: '#b00020', margin: '8px 0 0' }}>{submitError}</p>}
-                    <button type="submit">Save to Database</button>
+                    <button type="submit" style={{ alignSelf: 'flex-start' }}>Save to Database</button>
                 </>
             )}
         </form>
