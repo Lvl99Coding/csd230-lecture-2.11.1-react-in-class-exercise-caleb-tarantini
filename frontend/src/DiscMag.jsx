@@ -16,10 +16,10 @@ function DiscMag({ id, title, price, copies, hasDisc, orderQuantity, currentIssu
             id,
             title: tempTitle,
             price: parseFloat(tempPrice),
-            copies: tempCopies,
+            copies: parseInt(tempCopies, 10), // Ensure copies is an integer
             hasDisc: tempHasDisc,
-            orderQuantity: tempOrderQuantity,
-            currentIssue: tempCurrentIssue,
+            orderQty: parseInt(tempOrderQuantity, 10), // Updated field name to match server
+            currentIssue: new Date(tempCurrentIssue).toISOString().split('T')[0], // Format date as ISO 8601
         };
         onUpdate(id, updatedDiscMag);
         setIsEditing(false);

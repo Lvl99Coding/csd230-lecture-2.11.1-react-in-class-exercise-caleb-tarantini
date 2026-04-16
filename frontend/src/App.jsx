@@ -137,6 +137,7 @@ function App() {
     };
 
     const handleUpdateDiscMag = async (id, data) => {
+        console.log("Updating DiscMag with data:", data); // Log the payload
         const res = await api.put(`/discmags/${id}`, data);
         setDiscMags(discMags.map(d => d.id === id ? res.data : d));
     };
