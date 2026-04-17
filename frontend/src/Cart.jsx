@@ -19,7 +19,7 @@ function Cart({ api, onCartChange }) {
     if (!cart) return <p>Loading...</p>;
 
     return (
-        <div>
+        <div style={{ color: 'white' }}>
             <h1>Your Cart</h1>
             {cart.products.length === 0 ? <p>Empty</p> : (
                 <table border="1" width="100%">
@@ -27,7 +27,7 @@ function Cart({ api, onCartChange }) {
                     <tbody>
                     {cart.products.map(p => (
                         <tr key={p.id}>
-                            <td>{p.title || p.description}</td>
+                            <td>{p.title || p.description || p.brand +" "+ p.model || p.brand}</td>
                             <td>${p.price.toFixed(2)}</td>
                             <td><button onClick={() => handleRemove(p.id)}>Remove</button></td>
                         </tr>
@@ -40,4 +40,3 @@ function Cart({ api, onCartChange }) {
 }
 
 export default Cart;
-

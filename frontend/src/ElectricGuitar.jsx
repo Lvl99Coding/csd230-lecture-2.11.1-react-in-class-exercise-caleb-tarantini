@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { useAuth } from './provider/authProvider'; // Adjust the path as necessary
 
-function ElectricGuitar({ id, brand, model, numberOfStrings, numberOfPickups, price, onDelete, onUpdate }) {
+function ElectricGuitar({ id, brand, model, numberOfStrings, numberOfPickups, price, onDelete, onUpdate, onAddToCart }) {
     const { isAdmin } = useAuth(); // Get the isAdmin value from context
 
     // 1. Local state for "Edit Mode"
@@ -54,8 +54,10 @@ function ElectricGuitar({ id, brand, model, numberOfStrings, numberOfPickups, pr
                     <strong>Number of Strings:</strong> {numberOfStrings} | <strong>Number of Pickups:</strong> {numberOfPickups} | <strong>Price:</strong> ${price.toFixed(2)}
                 </p>
             </div>
-
             <div className="electric-guitar-actions">
+                <button onClick={() => onAddToCart(id)} style={{ backgroundColor: '#28a745', color: 'white' }}>
+                    🛒 Add to Cart
+                </button>
                 {isAdmin && (
                     <>
                         <button onClick={() => setIsEditing(true)} style={{ backgroundColor: '#ffc107', marginRight: '5px' }}>Edit</button>

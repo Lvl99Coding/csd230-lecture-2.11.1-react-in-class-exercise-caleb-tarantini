@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useAuth } from './provider/authProvider';
 
-function Magazine({ id, title, price, copies, orderQty, currentIssue, onDelete, onUpdate }) {
+function Magazine({ id, title, price, copies, orderQty, currentIssue, onDelete, onUpdate, onAddToCart }) {
     const { isAdmin } = useAuth();
     const [isEditing, setIsEditing] = useState(false);
     const [tempTitle, setTempTitle] = useState(title);
@@ -53,8 +53,10 @@ function Magazine({ id, title, price, copies, orderQty, currentIssue, onDelete, 
                     <strong>Current Issue:</strong> {currentIssue}
                 </p>
             </div>
-
             <div className="magazine-actions">
+                <button onClick={() => onAddToCart(id)} style={{ backgroundColor: '#28a745', color: 'white' }}>
+                    🛒 Add to Cart
+                </button>
                 {isAdmin && (
                     <>
                         <button onClick={() => setIsEditing(true)} style={{ backgroundColor: '#ffc107', marginRight: '5px' }}>Edit</button>

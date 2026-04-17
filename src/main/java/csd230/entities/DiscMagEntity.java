@@ -7,15 +7,25 @@ import java.time.LocalDate;
 
 @Entity
 @DiscriminatorValue("DISCMAG")
-public class DiscMagEntity extends MagazineEntity {
+public class DiscMagEntity extends PublicationEntity {
     private boolean hasDisc;
+    private Integer orderQty; // Changed from int to Integer
+    private LocalDate currentIssue;
 
     public DiscMagEntity() {}
 
-    public DiscMagEntity(String title, double price, int copies, int orderQuantity, LocalDate currentIssue, boolean hasDisc) {
-        super(title, price, copies, orderQuantity, currentIssue);
+    public DiscMagEntity(String title, Double price, Integer copies, Integer orderQuantity, LocalDate currentIssue, boolean hasDisc) {
+        super(title, price, copies);
+        this.orderQty = orderQuantity;
+        this.currentIssue = currentIssue;
         this.hasDisc = hasDisc;
+
     }
+
+    public Integer getOrderQty() { return orderQty; } // Updated return type
+    public void setOrderQty(Integer o) { this.orderQty = o; } // Updated parameter type
+    public void setCurrentIssue(LocalDate d) { this.currentIssue = d; }
+    public LocalDate getCurrentIssue() { return currentIssue; }
 
     public boolean isHasDisc() {
         return hasDisc;

@@ -43,7 +43,13 @@ public class DiscMagController {
     public DiscMagEntity replaceDiscMag(@RequestBody DiscMagEntity newDiscMag, @PathVariable Long id) {
         return discMagRepository.findById(id)
                 .map(discMag -> {
+                    discMag.setTitle(newDiscMag.getTitle());
+                    discMag.setPrice(newDiscMag.getPrice());
+                    discMag.setCopies(newDiscMag.getCopies());
+                    discMag.setOrderQty(newDiscMag.getOrderQty());
+                    discMag.setCurrentIssue(newDiscMag.getCurrentIssue());
                     discMag.setHasDisc(newDiscMag.isHasDisc());
+
                     return discMagRepository.save(discMag);
                 })
                 .orElseGet(() -> {

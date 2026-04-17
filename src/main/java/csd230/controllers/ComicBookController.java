@@ -7,20 +7,21 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin(origins = "http://localhost:3000")
+
 @RestController
 @RequestMapping("/api/rest/comicbooks")
+@CrossOrigin(origins = "*")
 public class ComicBookController {
 
     private final ComicBookRepository comicBookRepository;
 
-    @Autowired
+
     public ComicBookController(ComicBookRepository comicBookRepository) {
         this.comicBookRepository = comicBookRepository;
     }
 
     @GetMapping
-    public List<ComicBookEntity> getAllComicBooks() {
+    public List<ComicBookEntity> all() {
         return comicBookRepository.findAll();
     }
 
@@ -35,11 +36,20 @@ public class ComicBookController {
     }
 
     @PutMapping("/{id}")
-    public ComicBookEntity updateComicBook(@PathVariable Long id, @RequestBody ComicBookEntity updatedComicBook) {
+    public ComicBookEntity updateComicBook(@RequestBody ComicBookEntity updatedComicBook, @PathVariable Long id) {
+        System.out.println("Received payload: " + updatedComicBook);
         return comicBookRepository.findById(id).map(comicBook -> {
+            comicBook.setTitle(updatedComicBook.getTitle());
+            comicBook.setAuthor(updatedComicBook.getAuthor());
+            comicBook.setPrice(updatedComicBook.getPrice());
+            comicBook.setCopies(updatedComicBook.getCopies());
             comicBook.setGenre(updatedComicBook.getGenre());
+
             return comicBookRepository.save(comicBook);
-        }).orElse(null);
+        }).orElseGet(() -> {
+            updatedComicBook.setId(id);
+            return comicBookRepository.save(updatedComicBook);
+        });
     }
 
     @DeleteMapping("/{id}")

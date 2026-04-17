@@ -1,14 +1,14 @@
 import { useState } from 'react';
 import { useAuth } from './provider/authProvider';
 
-function DiscMag({ id, title, price, copies, hasDisc, orderQuantity, currentIssue, onDelete, onUpdate, onAddToCart }) {
+function DiscMag({ id, title, price, copies, hasDisc, orderQty, currentIssue, onDelete, onUpdate, onAddToCart }) {
     const { isAdmin } = useAuth();
     const [isEditing, setIsEditing] = useState(false);
     const [tempTitle, setTempTitle] = useState(title);
     const [tempPrice, setTempPrice] = useState(price);
     const [tempCopies, setTempCopies] = useState(copies);
     const [tempHasDisc, setTempHasDisc] = useState(hasDisc);
-    const [tempOrderQuantity, setTempOrderQuantity] = useState(orderQuantity);
+    const [tempOrderQuantity, setTempOrderQuantity] = useState(orderQty || 0);
     const [tempCurrentIssue, setTempCurrentIssue] = useState(currentIssue);
 
     const handleSave = () => {
@@ -16,10 +16,10 @@ function DiscMag({ id, title, price, copies, hasDisc, orderQuantity, currentIssu
             id,
             title: tempTitle,
             price: parseFloat(tempPrice),
-            copies: parseInt(tempCopies, 10), // Ensure copies is an integer
+            copies: tempCopies, // Ensure copies is an integer
             hasDisc: tempHasDisc,
-            orderQty: parseInt(tempOrderQuantity, 10), // Updated field name to match server
-            currentIssue: new Date(tempCurrentIssue).toISOString().split('T')[0], // Format date as ISO 8601
+            orderQty: tempOrderQuantity, // Updated field name to match server
+            currentIssue: tempCurrentIssue// Format date as ISO 8601
         };
         onUpdate(id, updatedDiscMag);
         setIsEditing(false);
@@ -53,7 +53,7 @@ function DiscMag({ id, title, price, copies, hasDisc, orderQuantity, currentIssu
             <div className="discmag-info" style={{ textAlign: 'left' }}>
                 <h3 style={{ margin: '0 0 5px 0' }}>{title}</h3>
                 <p style={{ margin: '0' }}>
-                    <strong>Price:</strong> ${price.toFixed(2)} | <strong>Copies:</strong> {copies} | <strong>Order Qty:</strong> {orderQuantity}
+                    <strong>Price:</strong> ${price.toFixed(2)} | <strong>Copies:</strong> {copies} | <strong>Order Qty:</strong> {orderQty}
                 </p>
                 <p style={{ margin: '0' }}>
                     <strong>Current Issue:</strong> {currentIssue} | <strong>Has Disc:</strong> {hasDisc ? 'Yes' : 'No'}

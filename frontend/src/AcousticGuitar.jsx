@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { useAuth } from './provider/authProvider'; // Adjust the import based on your folder structure
 
-function AcousticGuitar({ id, brand, model, numberOfStrings, hasCutaway, price, onDelete, onUpdate }) {
+function AcousticGuitar({ id, brand, model, numberOfStrings, hasCutaway, price, orderQty, onDelete, onUpdate, onAddToCart }) {
     const { isAdmin } = useAuth(); // Get the isAdmin value from context
 
     // 1. Local state for "Edit Mode"
@@ -57,7 +57,7 @@ function AcousticGuitar({ id, brand, model, numberOfStrings, hasCutaway, price, 
             <div className="acoustic-guitar-info" style={{ textAlign: 'left' }}>
                 <h3 style={{ margin: '0 0 5px 0' }}>{brand} {model}</h3>
                 <p style={{ margin: '0' }}>
-                    <strong>Number of Strings:</strong> {numberOfStrings} | <strong>Has Cutaway:</strong> {hasCutaway ? 'Yes' : 'No'} | <strong>Price:</strong> ${price.toFixed(2)}
+                    <strong>Number of Strings:</strong> {numberOfStrings} | <strong>Has Cutaway:</strong> {hasCutaway ? 'Yes' : 'No'} | <strong>Price:</strong> ${price.toFixed(2)} | <strong>Order Qty:</strong> {orderQty}
                 </p>
             </div>
 
@@ -68,6 +68,7 @@ function AcousticGuitar({ id, brand, model, numberOfStrings, hasCutaway, price, 
                         <button onClick={() => onDelete(id)} style={{ backgroundColor: '#ff4444', color: 'white' }}>Delete</button>
                     </>
                 )}
+                <button onClick={() => onAddToCart(id)} style={{ backgroundColor: '#28a745', color: 'white', marginLeft: '10px' }}>🛒 Add to Cart</button>
             </div>
         </div>
     );
